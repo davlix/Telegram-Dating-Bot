@@ -44,7 +44,7 @@ Anda dapat berkontribusi pada pengembangan bot ini dengan membuat *pull request*
 
 ## Lisensi
 
-Proyek ini dilisensikan di bawah [MIT License](LICENSE).
+Proyek ini dilisensikan di bawah Apache-2.0 license.
 
 ## Dukungan
 
