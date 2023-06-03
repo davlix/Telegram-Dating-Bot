@@ -1,3 +1,7 @@
+# Bot Telegram Dating
+
+Bot Telegram Dating adalah bot yang dibuat menggunakan Python dan Telegram Bot API. Bot ini memungkinkan pengguna untuk membuat profil dating dan mencari pasangan potensial berdasarkan preferensi mereka.
+
 ## Fitur
 
 1. **Profil Dating**: Pengguna dapat membuat profil dating dengan mengisi informasi seperti jenis kelamin, usia, hobi, dan lokasi.
@@ -11,11 +15,6 @@
 5. **Kecocokan**: Bot akan memberitahu pengguna tentang kecocokan dengan pasangan yang disarankan.
 
 6. **Penghentian Pencarian**: Pengguna dapat menghentikan proses pencarian pasangan kapan saja dengan menggunakan perintah `/cancel` atau tombol "Tidak" yang tersedia.
-
-
-# Bot Telegram Dating
-
-Bot Telegram Dating adalah bot yang dibuat menggunakan Python dan Telegram Bot API. Bot ini memungkinkan pengguna untuk membuat profil dating dan mencari pasangan potensial berdasarkan preferensi mereka.
 
 ## Cara Menggunakan
 
