@@ -1,10 +1,11 @@
 import logging
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton
+import sqlite3
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton, File
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, \
     CallbackQueryHandler, CallbackContext
 
 # Daftar status conversasi
-GENDER, AGE, HOBBY, LOCATION, MATCHING = range(5)
+GENDER, AGE, HOBBY, LOCATION, PHOTO, MATCHING = range(6)
 
 # Fungsi untuk menangani perintah /start
 def start(update, context):
@@ -41,7 +42,15 @@ def location(update, context):
     user = update.message.from_user
     location = update.message.location
     context.user_data['location'] = (location.latitude, location.longitude)
-    update.message.reply_text('Terima kasih! Profil Anda telah disimpan.')
+    update.message.reply_text('Terima kasih! Silakan unggah foto profil Anda sekarang.')
+    return PHOTO
+
+# Fungsi untuk menangani unggahan foto profil
+def photo(update, context):
+    user = update.message.from_user
+    photo_file = update.message.photo[-1].get_file()
+    photo_file.download('profile_photos/{}.jpg'.format(user.id))
+    update.message.reply_text('Foto profil Anda telah diunggah. Profil Anda telah disimpan.')
     update.message.reply_text('Mulai mencari pasangan?', reply_markup=ReplyKeyboardMarkup([[KeyboardButton('Ya'), KeyboardButton('Tidak')]], one_time_keyboard=True))
     return MATCHING
 
@@ -65,13 +74,8 @@ def choose_matching(update, context):
     else:
         update.message.reply_text('Anda tidak tertarik dengan pasangan ini. Coba yang lain ya!')
     
-    update.message.reply_text('Apakah Anda ingin mencari pasangan lain?', reply_markup=ReplyKeyboardMarkup([[KeyboardButton('Ya'), KeyboardButton('Tidak')]], one_time_keyboard=True))
+    update.message.reply_text('Apakah Anda ingin mencari pasangan lagi?', reply_markup=ReplyKeyboardMarkup([[KeyboardButton('Ya'), KeyboardButton('Tidak')]], one_time_keyboard=True))
     return MATCHING
-
-# Fungsi untuk menghentikan pencarian pasangan
-def stop_matching(update, context):
-    update.message.reply_text('Terima kasih! Pencarian pasangan dihentikan.', reply_markup=ReplyKeyboardRemove())
-    return ConversationHandler.END
 
 # Fungsi untuk membatalkan proses dan keluar
 def cancel(update, context):
@@ -87,6 +91,22 @@ def main():
     updater = Updater(token='TOKEN_BOT_ANDA', use_context=True)
     dispatcher = updater.dispatcher
     
+    # Inisialisasi database
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS profiles (
+            id INTEGER PRIMARY KEY,
+            user_id INTEGER,
+            gender TEXT,
+            age TEXT,
+            hobby TEXT,
+            location TEXT,
+            photo_path TEXT
+        )
+    ''')
+    conn.commit()
+    
     # Daftar command handler
     start_handler = CommandHandler('start', start)
     dispatcher.add_handler(start_handler)
@@ -99,6 +119,7 @@ def main():
             AGE: [MessageHandler(Filters.text & ~Filters.command, age)],
             HOBBY: [MessageHandler(Filters.text & ~Filters.command, hobby)],
             LOCATION: [MessageHandler(Filters.location, location)],
+            PHOTO: [MessageHandler(Filters.photo, photo)],
             MATCHING: [
                 MessageHandler(Filters.text & ~Filters.command, start_matching),
                 MessageHandler(Filters.text & ~Filters.command, choose_matching)
