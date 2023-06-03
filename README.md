@@ -1,4 +1,17 @@
-Tentu! Berikut adalah contoh penjelasan yang dapat Anda masukkan ke dalam file `readme.md` untuk menjelaskan penggunaan bot Telegram dating:
+## Fitur
+
+1. **Profil Dating**: Pengguna dapat membuat profil dating dengan mengisi informasi seperti jenis kelamin, usia, hobi, dan lokasi.
+
+2. **Pencarian Pasangan**: Bot akan mencari pasangan potensial berdasarkan preferensi pengguna, seperti jenis kelamin yang diinginkan.
+
+3. **Tombol Pilihan**: Pengguna dapat menggunakan tombol (button) untuk memilih opsi, seperti memilih jenis kelamin, menyukai atau tidak menyukai pasangan, dan lainnya.
+
+4. **Lokasi**: Pengguna dapat mengirimkan lokasi saat ini untuk mencari pasangan di sekitar lokasi tersebut.
+
+5. **Kecocokan**: Bot akan memberitahu pengguna tentang kecocokan dengan pasangan yang disarankan.
+
+6. **Penghentian Pencarian**: Pengguna dapat menghentikan proses pencarian pasangan kapan saja dengan menggunakan perintah `/cancel` atau tombol "Tidak" yang tersedia.
+
 
 # Bot Telegram Dating
 
