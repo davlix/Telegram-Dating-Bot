@@ -4,10 +4,8 @@ from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton, F
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, \
     CallbackQueryHandler, CallbackContext
 
-# Daftar status conversasi
-GENDER, AGE, HOBBY, LOCATION, PHOTO, MATCHING = range(6)
+GENDER, AGE, HOBBY, LOCATION, PHOTO, DESCRIPTION, MATCHING = range(7)
 
-# Fungsi untuk menangani perintah /start
 def start(update, context):
     reply_keyboard = [[KeyboardButton('Pria'), KeyboardButton('Wanita')]]
     update.message.reply_text(
@@ -16,28 +14,24 @@ def start(update, context):
     )
     return GENDER
 
-# Fungsi untuk menangani input jenis kelamin
 def gender(update, context):
     user = update.message.from_user
     context.user_data['gender'] = update.message.text
     update.message.reply_text('Berapa usia Anda?')
     return AGE
 
-# Fungsi untuk menangani input usia
 def age(update, context):
     user = update.message.from_user
     context.user_data['age'] = update.message.text
     update.message.reply_text('Apa hobi Anda?')
     return HOBBY
 
-# Fungsi untuk menangani input hobi
 def hobby(update, context):
     user = update.message.from_user
     context.user_data['hobby'] = update.message.text
     update.message.reply_text('Dimana lokasi Anda? Kirimkan lokasi Anda saat ini, silakan.')
     return LOCATION
 
-# Fungsi untuk menangani input lokasi
 def location(update, context):
     user = update.message.from_user
     location = update.message.location
@@ -45,16 +39,22 @@ def location(update, context):
     update.message.reply_text('Terima kasih! Silakan unggah foto profil Anda sekarang.')
     return PHOTO
 
-# Fungsi untuk menangani unggahan foto profil
+
 def photo(update, context):
     user = update.message.from_user
     photo_file = update.message.photo[-1].get_file()
     photo_file.download('profile_photos/{}.jpg'.format(user.id))
-    update.message.reply_text('Foto profil Anda telah diunggah. Profil Anda telah disimpan.')
+    update.message.reply_text('Foto profil Anda telah diunggah. Silakan tambahkan deskripsi profil Anda sekarang.')
+    return DESCRIPTION
+
+
+def description(update, context):
+    user = update.message.from_user
+    context.user_data['description'] = update.message.text
+    update.message.reply_text('Deskripsi profil Anda telah ditambahkan. Profil Anda telah disimpan.')
     update.message.reply_text('Mulai mencari pasangan?', reply_markup=ReplyKeyboardMarkup([[KeyboardButton('Ya'), KeyboardButton('Tidak')]], one_time_keyboard=True))
     return MATCHING
 
-# Fungsi untuk memulai proses pencarian pasangan
 def start_matching(update, context):
     user = update.message.from_user
     reply_keyboard = [[KeyboardButton('Suka'), KeyboardButton('Tidak Suka')]]
@@ -64,7 +64,7 @@ def start_matching(update, context):
     )
     return MATCHING
 
-# Fungsi untuk menangani pemilihan pasangan
+
 def choose_matching(update, context):
     user = update.message.from_user
     choice = update.message.text
@@ -77,21 +77,17 @@ def choose_matching(update, context):
     update.message.reply_text('Apakah Anda ingin mencari pasangan lagi?', reply_markup=ReplyKeyboardMarkup([[KeyboardButton('Ya'), KeyboardButton('Tidak')]], one_time_keyboard=True))
     return MATCHING
 
-# Fungsi untuk membatalkan proses dan keluar
 def cancel(update, context):
     user = update.message.from_user
     update.message.reply_text('Proses dibatalkan. Sampai jumpa!')
     return ConversationHandler.END
 
 def main():
-    # Konfigurasi logging
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
     
-    # Inisialisasi bot dan token
     updater = Updater(token='TOKEN_BOT_ANDA', use_context=True)
     dispatcher = updater.dispatcher
     
-    # Inisialisasi database
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
     c.execute('''
@@ -102,7 +98,8 @@ def main():
             age TEXT,
             hobby TEXT,
             location TEXT,
-            photo_path TEXT
+            photo_path TEXT,
+            description TEXT
         )
     ''')
     conn.commit()
@@ -120,6 +117,7 @@ def main():
             HOBBY: [MessageHandler(Filters.text & ~Filters.command, hobby)],
             LOCATION: [MessageHandler(Filters.location, location)],
             PHOTO: [MessageHandler(Filters.photo, photo)],
+            DESCRIPTION: [MessageHandler(Filters.text & ~Filters.command, description)],
             MATCHING: [
                 MessageHandler(Filters.text & ~Filters.command, start_matching),
                 MessageHandler(Filters.text & ~Filters.command, choose_matching)
@@ -129,7 +127,6 @@ def main():
     )
     dispatcher.add_handler(conversation_handler)
     
-    # Jalankan bot
     updater.start_polling()
     updater.idle()
 
