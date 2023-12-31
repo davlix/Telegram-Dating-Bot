@@ -1,62 +1,76 @@
 import logging
 import sqlite3
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton, File
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, \
-    CallbackQueryHandler, CallbackContext
+from telegram import ReplyKeyboardMarkup, KeyboardButton
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 
 GENDER, AGE, HOBBY, LOCATION, PHOTO, DESCRIPTION, MATCHING = range(7)
 
 def start(update, context):
-    reply_keyboard = [[KeyboardButton('Pria'), KeyboardButton('Wanita')]]
-    update.message.reply_text(
-        'Halo! Selamat datang di bot dating. Silakan pilih jenis kelamin Anda.',
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-    )
-    return GENDER
+    user_id = update.message.from_user.id
+    if user_already_registered(user_id):
+        update.message.reply_text("Selamat datang kembali! Anda sudah terdaftar.")
+    else:
+        reply_keyboard = [[KeyboardButton('Pria'), KeyboardButton('Wanita')]]
+        update.message.reply_text(
+            'Halo! Silakan pilih jenis kelamin Anda.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+        )
+        return GENDER
 
 def gender(update, context):
-    user = update.message.from_user
+    user_id = update.message.from_user.id
     context.user_data['gender'] = update.message.text
     update.message.reply_text('Berapa usia Anda?')
     return AGE
 
 def age(update, context):
-    user = update.message.from_user
+    user_id = update.message.from_user.id
     context.user_data['age'] = update.message.text
     update.message.reply_text('Apa hobi Anda?')
     return HOBBY
 
+conn = sqlite3.connect('database.db')
+c = conn.cursor()
+c.execute('''
+    CREATE TABLE IF NOT EXISTS messages (
+        id INTEGER PRIMARY KEY,
+        sender_id INTEGER,
+        receiver_id INTEGER,
+        content TEXT,
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+''')
+conn.commit()
+
 def hobby(update, context):
-    user = update.message.from_user
+    user_id = update.message.from_user.id
     context.user_data['hobby'] = update.message.text
     update.message.reply_text('Dimana lokasi Anda? Kirimkan lokasi Anda saat ini, silakan.')
     return LOCATION
 
 def location(update, context):
-    user = update.message.from_user
+    user_id = update.message.from_user.id
     location = update.message.location
     context.user_data['location'] = (location.latitude, location.longitude)
     update.message.reply_text('Terima kasih! Silakan unggah foto profil Anda sekarang.')
     return PHOTO
 
-
 def photo(update, context):
-    user = update.message.from_user
+    user_id = update.message.from_user.id
     photo_file = update.message.photo[-1].get_file()
-    photo_file.download('profile_photos/{}.jpg'.format(user.id))
+    photo_file.download('profile_photos/{}.jpg'.format(user_id))
     update.message.reply_text('Foto profil Anda telah diunggah. Silakan tambahkan deskripsi profil Anda sekarang.')
     return DESCRIPTION
 
-
 def description(update, context):
-    user = update.message.from_user
+    user_id = update.message.from_user.id
     context.user_data['description'] = update.message.text
     update.message.reply_text('Deskripsi profil Anda telah ditambahkan. Profil Anda telah disimpan.')
     update.message.reply_text('Mulai mencari pasangan?', reply_markup=ReplyKeyboardMarkup([[KeyboardButton('Ya'), KeyboardButton('Tidak')]], one_time_keyboard=True))
     return MATCHING
 
 def start_matching(update, context):
-    user = update.message.from_user
+    user_id = update.message.from_user.id
     reply_keyboard = [[KeyboardButton('Suka'), KeyboardButton('Tidak Suka')]]
     update.message.reply_text(
         'Saya telah menemukan pasangan potensial untuk Anda. Apakah Anda tertarik?',
@@ -64,9 +78,8 @@ def start_matching(update, context):
     )
     return MATCHING
 
-
 def choose_matching(update, context):
-    user = update.message.from_user
+    user_id = update.message.from_user.id
     choice = update.message.text
     
     if choice == 'Suka':
@@ -78,37 +91,22 @@ def choose_matching(update, context):
     return MATCHING
 
 def cancel(update, context):
-    user = update.message.from_user
+    user_id = update.message.from_user.id
     update.message.reply_text('Proses dibatalkan. Sampai jumpa!')
     return ConversationHandler.END
 
-def main():
+def user_already_registered(user_id):
+    pass
+
+if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
     
     updater = Updater(token='TOKEN_BOT_ANDA', use_context=True)
     dispatcher = updater.dispatcher
-    
-    conn = sqlite3.connect('database.db')
-    c = conn.cursor()
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS profiles (
-            id INTEGER PRIMARY KEY,
-            user_id INTEGER,
-            gender TEXT,
-            age TEXT,
-            hobby TEXT,
-            location TEXT,
-            photo_path TEXT,
-            description TEXT
-        )
-    ''')
-    conn.commit()
-    
-    # Daftar command handler
+
     start_handler = CommandHandler('start', start)
     dispatcher.add_handler(start_handler)
-    
-    # Daftar message handler
+
     conversation_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
         states={
@@ -129,6 +127,3 @@ def main():
     
     updater.start_polling()
     updater.idle()
-
-if __name__ == '__main__':
-    main()
