@@ -1,6 +1,3 @@
-Tentu, berikut adalah contoh isi `README.md` yang diperbarui dengan fitur-fitur yang telah ditambahkan ke dalam proyek bot Telegram Anda:
-
-```markdown
 # Telegram Bot for Matching Application
 
 This Telegram bot application allows users to register, create profiles, and find potential matches based on their preferences.
