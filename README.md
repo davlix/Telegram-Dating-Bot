@@ -1,67 +1,49 @@
-# Bot Telegram Dating
+Tentu, berikut adalah contoh isi `README.md` yang diperbarui dengan fitur-fitur yang telah ditambahkan ke dalam proyek bot Telegram Anda:
 
-Bot Telegram Dating adalah bot yang dibuat menggunakan Python dan Telegram Bot API. Bot ini memungkinkan pengguna untuk membuat profil dating dan mencari pasangan potensial berdasarkan preferensi mereka.
+```markdown
+# Telegram Bot for Matching Application
 
-## Fitur
+This Telegram bot application allows users to register, create profiles, and find potential matches based on their preferences.
 
-1. **Profil Dating**: Pengguna dapat membuat profil dating dengan mengisi informasi seperti jenis kelamin, usia, hobi, dan lokasi.
+## Features
 
-2. **Pencarian Pasangan**: Bot akan mencari pasangan potensial berdasarkan preferensi pengguna, seperti jenis kelamin yang diinginkan.
+- **User Authentication:** Users can register and log in to the bot using their Telegram account.
+- **Profile Management:** Users can set up their profiles including gender, age, hobbies, location, photo, and description.
+- **Search and Filtering:** Users can search for potential matches based on specified criteria.
+- **Notifications:** Users receive notifications for new matches or messages.
+- **Chat History:** Users can view their chat history with matches.
+- **Privacy Settings:** Users can manage privacy settings such as who can view their profile.
+- **Database Optimization:** The application uses SQLite for efficient data storage and retrieval.
+- **Security Considerations:** Basic security measures are implemented to protect user data.
 
-3. **Tombol Pilihan**: Pengguna dapat menggunakan tombol (button) untuk memilih opsi, seperti memilih jenis kelamin, menyukai atau tidak menyukai pasangan, dan lainnya.
+## Setup
 
-4. **Lokasi**: Pengguna dapat mengirimkan lokasi saat ini untuk mencari pasangan di sekitar lokasi tersebut.
-
-5. **Kecocokan**: Bot akan memberitahu pengguna tentang kecocokan dengan pasangan yang disarankan.
-
-6. **Penghentian Pencarian**: Pengguna dapat menghentikan proses pencarian pasangan kapan saja dengan menggunakan perintah `/cancel` atau tombol "Tidak" yang tersedia.
-
-## Cara Menggunakan
-
-1. Dapatkan token bot Telegram dengan menghubungi [BotFather](https://t.me/BotFather) di Telegram.
-
-2. Clone repositori ini atau salin kode bot dari file `bot.py` ke proyek Python Anda.
-
-3. Pasang dependensi dengan menjalankan perintah berikut:
-
-   ```
-   pip install python-telegram-bot
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/davlix/Telegram-Dating-Bot.git
+   cd Telegram-Dating-Bot
    ```
 
-4. Ganti `'TOKEN_BOT_ANDA'` di dalam file `bot.py` dengan token bot yang Anda dapatkan.
-
-5. Jalankan skrip Python dengan menjalankan perintah berikut:
-
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
    ```
+
+3. Set up your Telegram Bot:
+   - Create a bot and get the API token from BotFather.
+   - Replace `'TOKEN_BOT_ANDA'` in `main.py` with your bot's API token.
+
+4. Run the bot:
+   ```bash
    python bot.py
    ```
 
-6. Cari bot di Telegram dan mulai percakapan dengannya.
+## Usage
 
-7. Bot akan memandu Anda melalui langkah-langkah untuk membuat profil dating. Anda akan diminta untuk memilih jenis kelamin, memasukkan usia, mengisi hobi, dan mengirimkan lokasi saat ini.
+- Start the bot by sending `/start` to register and set up your profile.
+- Use commands like `/view_profile` to view your profile or `/edit_profile` to edit your profile description.
+- Use the bot's features to find and interact with potential matches.
 
-8. Setelah profil Anda lengkap, bot akan menawarkan pilihan untuk mulai mencari pasangan.
+## Contributing
 
-9. Bot akan menemukan pasangan potensial untuk Anda dan menampilkan profil mereka. Anda dapat memilih untuk menyukai atau tidak menyukai pasangan tersebut.
-
-10. Jika Anda menyukai pasangan, bot akan memberi tahu Anda tentang kecocokan dan memberikan opsi untuk mencari pasangan lain.
-
-11. Jika Anda tidak tertarik atau ingin mencari pasangan lain, bot akan menemukan pasangan potensial berikutnya.
-
-12. Proses pencarian dapat dihentikan kapan saja dengan menggunakan perintah `/cancel` atau tombol "Tidak" yang tersedia.
-
-## Kontribusi
-
-Anda dapat berkontribusi pada pengembangan bot ini dengan membuat *pull request* atau melaporkan masalah (*issue*) di repositori ini.
-
-## Lisensi
-
-Proyek ini dilisensikan di bawah Apache-2.0 license.
-
-## Dukungan
-
-Jika Anda memiliki pertanyaan atau masalah, silakan buka *issue* di repositori ini atau hubungi saya
-
----
-
-Selamat membuat bot Telegram Dating! Jika Anda memiliki pertanyaan lebih lanjut, jangan ragu untuk bertanya.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
