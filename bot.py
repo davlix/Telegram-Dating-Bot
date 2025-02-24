@@ -1,7 +1,14 @@
 import logging
 import aiosqlite
-from telegram import ReplyKeyboardMarkup, KeyboardButton, Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ConversationHandler, CallbackContext
+from telegram import __version__ as TG_VER
+
+# Ensure compatibility with the latest version of python-telegram-bot
+try:
+    from telegram import ReplyKeyboardMarkup, KeyboardButton, Update
+    from telegram.ext import Application, CommandHandler, MessageHandler, filters, ConversationHandler, CallbackContext
+except ImportError:
+    from telegram import ReplyKeyboardMarkup, KeyboardButton, Update
+    from telegram.ext import Application, CommandHandler, MessageHandler, Filters as filters, ConversationHandler, CallbackContext
 
 GENDER, AGE, HOBBY, LOCATION, PHOTO, DESCRIPTION, MATCHING, EDIT_PROFILE_DESCRIPTION = range(8)
 
@@ -143,7 +150,6 @@ async def view_profile(update: Update, context: CallbackContext):
         await update.message.reply_text(f"Profil Anda:\n{profile_data}")
     else:
         await update.message.reply_text("Profil Anda kosong.")
-
 
 async def get_user_profile(user_id):
     conn = await get_db_connection()
