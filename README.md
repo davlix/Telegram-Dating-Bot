@@ -1,46 +1,100 @@
-# Telegram Bot for Matching Application
+# Telegram Dating Bot (2025 Version)
 
-This Telegram bot application allows users to register, create profiles, and find potential matches based on their preferences.
+This is a Telegram dating bot project built with Python using the latest version of the `python-telegram-bot` library (v20+). This bot allows users to register, create a profile, and find matches based on a "Like" or "Dislike" swipe system.
 
-## Features
+---
 
-- **User Authentication:** Users can register and log in to the bot using their Telegram account.
-- **Profile Management:** Users can set up their profiles including gender, age, hobbies, location, photo, and description.
-- **Search and Filtering:** Users can search for potential matches based on specified criteria.
-- **Notifications:** Users receive notifications for new matches or messages.
-- **Chat History:** Users can view their chat history with matches.
-- **Privacy Settings:** Users can manage privacy settings such as who can view their profile.
-- **Database Optimization:** The application uses SQLite for efficient data storage and retrieval.
-- **Security Considerations:** Basic security measures are implemented to protect user data.
+## ✨ Key Features
 
-## Setup
+-   **👤 Complete Profile Registration:** Users can sign up by providing the following information:
+    -   Gender
+    -   Age
+    -   Hobby
+    -   Location (using Telegram's native feature)
+    -   Profile Picture
+    -   Self-Description
+-   **💘 Matching System:**
+    -   Displays other user profiles one by one.
+    -   Inline "❤️ Like" and "❌ Dislike" buttons for easy interaction.
+    -   The bot will not show profiles that have already been seen.
+-   **🎉 Mutual Like Notifications:** If two users like each other, the bot will automatically notify both of them that they have a match.
+-   **📝 Profile Management:**
+    -   Users can view their own profile at any time.
+    -   Features to edit their description and hobby after registration.
+-   **💾 Local Database:** Uses **SQLite** via `aiosqlite` for persistent and fast data storage.
+-   **🤖 Modern Interface:** Utilizes `ConversationHandler` for a structured conversation flow and `InlineKeyboardMarkup` for a better user experience.
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/davlix/Telegram-Dating-Bot.git
-   cd Telegram-Dating-Bot
-   ```
+---
 
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+## 🛠️ Tech Stack
 
-3. Set up your Telegram Bot:
-   - Create a bot and get the API token from BotFather.
-   - Replace `'TOKEN_BOT_ANDA'` in `main.py` with your bot's API token.
+-   **Python 3.8+**
+-   **python-telegram-bot v20+**
+-   **aiosqlite** for asynchronous database operations
+-   **SQLite** as the database
 
-4. Run the bot:
-   ```bash
-   python bot.py
-   ```
+---
 
-## Usage
+## 🚀 How to Run the Bot
 
-- Start the bot by sending `/start` to register and set up your profile.
-- Use commands like `/view_profile` to view your profile or `/edit_profile` to edit your profile description.
-- Use the bot's features to find and interact with potential matches.
+### 1. Prerequisites
 
-## Contributing
+-   Python 3.8 or newer.
+-   A Telegram account.
+-   **A Telegram Bot Token.** You can get one from [@BotFather](https://t.me/BotFather) on Telegram.
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+### 2. Installation
+
+1.  **Download the Code**
+    Copy the `telegram_bot_2025.py` file to your local directory.
+
+2.  **Install Dependencies**
+    Open a terminal or command prompt in the project directory and run the following command:
+    ```bash
+    pip install "python-telegram-bot[ext]" aiosqlite
+    ```
+
+### 3. Configuration
+
+1.  **Set Your Bot Token**
+    The most recommended way is to use an environment variable.
+
+    -   **On Linux/macOS:**
+        ```bash
+        export TELEGRAM_TOKEN="YOUR_TOKEN_HERE"
+        ```
+    -   **On Windows (CMD):**
+        ```bash
+        set TELEGRAM_TOKEN="YOUR_TOKEN_HERE"
+        ```
+    -   **On Windows (PowerShell):**
+        ```powershell
+        $env:TELEGRAM_TOKEN="YOUR_TOKEN_HERE"
+        ```
+
+    *Alternative (not recommended for production):* You can directly change the following line of code in the `.py` file:
+    ```python
+    token = os.getenv("TELEGRAM_TOKEN", "YOUR_BOT_TOKEN_HERE")
+    ```
+
+### 4. Run the Bot
+
+After all dependencies are installed and the token is set, run the bot with the command:
+```bash
+python your_bot_file.py
+```
+
+Your bot is now active and ready to receive messages on Telegram!
+
+---
+
+## 🤖 Bot Commands
+
+-   `/start` - Starts the interaction with the bot, either for registration or to go to the main menu.
+-   `/cancel` - Cancels the current process (e.g., during registration).
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
